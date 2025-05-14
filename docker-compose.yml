@@ -115,8 +115,5 @@ services:
 
 volumes:
   postgresql-data:
-    driver: local
   redis-data:
-    driver: local
   zammad-storage:
-    driver: local

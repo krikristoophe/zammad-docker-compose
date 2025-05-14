@@ -30,7 +30,7 @@ x-shared:
       ELASTICSEARCH_PASS: ${ELASTICSEARCH_PASS:-zammad}
       ELASTICSEARCH_NAMESPACE:
       ELASTICSEARCH_REINDEX:
-      NGINX_PORT:
+      NGINX_PORT: 9500
       NGINX_CLIENT_MAX_BODY_SIZE:
       NGINX_SERVER_NAME:
       NGINX_SERVER_SCHEME:
@@ -62,14 +62,6 @@ x-shared:
       - zammad-redis
 
 services:
-  zammad-backup:
-    <<: *zammad-service
-    command: ["zammad-backup"]
-    volumes:
-      - zammad-backup:/var/tmp/zammad
-      - zammad-storage:/opt/zammad/storage:ro
-    user: 0:0
-
   zammad-init:
     <<: *zammad-service
     command: ["zammad-init"]
@@ -87,9 +79,9 @@ services:
     <<: *zammad-service
     command: ["zammad-nginx"]
     expose:
-      - "${NGINX_PORT:-8080}"
+      - "${NGINX_PORT:-9500}"
     ports:
-      - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
+      - "${NGINX_EXPOSE_PORT:-9500}:${NGINX_PORT:-9500}"
     depends_on:
       - zammad-railsserver
 
@@ -125,8 +117,6 @@ volumes:
   postgresql-data:
     driver: local
   redis-data:
-    driver: local
-  zammad-backup:
     driver: local
   zammad-storage:
     driver: local

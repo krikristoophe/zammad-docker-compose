@@ -22,7 +22,7 @@ x-shared:
       # Allow passing in these variables via .env:
       AUTOWIZARD_JSON:
       AUTOWIZARD_RELATIVE_PATH:
-      ELASTICSEARCH_ENABLED:
+      ELASTICSEARCH_ENABLED: false
       ELASTICSEARCH_SCHEMA:
       ELASTICSEARCH_HOST:
       ELASTICSEARCH_PORT:
@@ -69,20 +69,6 @@ services:
       - zammad-backup:/var/tmp/zammad
       - zammad-storage:/opt/zammad/storage:ro
     user: 0:0
-
-  zammad-elasticsearch:
-    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.18.0}
-    restart: ${RESTART:-always}
-    volumes:
-      - elasticsearch-data:/bitnami/elasticsearch/data
-    environment:
-      # Enable authorization without HTTPS. For external access with
-      #   SSL termination, use solutions like nginx-proxy-manager.
-      ELASTICSEARCH_ENABLE_SECURITY: 'true'
-      ELASTICSEARCH_SKIP_TRANSPORT_TLS: 'true'
-      ELASTICSEARCH_ENABLE_REST_TLS: 'false'
-      # ELASTICSEARCH_USER is hardcoded to 'elastic' in the container.
-      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASS:-zammad}
 
   zammad-init:
     <<: *zammad-service
@@ -136,8 +122,6 @@ services:
     command: ["zammad-websocket"]
 
 volumes:
-  elasticsearch-data:
-    driver: local
   postgresql-data:
     driver: local
   redis-data:
